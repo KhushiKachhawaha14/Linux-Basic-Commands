@@ -1,4 +1,5 @@
 ls-Lists files and directories.
+rm - removes files.
 cd-Changes the directory.
 pwd-Prints current directory path.
 cat-Concatenate and print file content to the terminal.
