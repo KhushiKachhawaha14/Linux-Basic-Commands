@@ -1,3 +1,6 @@
+ls-Lists files and directories.
+cd-Changes the directory.
+pwd-Prints current directory path.
 cat-Concatenate and print file content to the terminal.
 cat config.yml
 less-View file content one page at a time. Good for large files.
