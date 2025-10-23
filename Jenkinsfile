@@ -51,7 +51,16 @@ pipeline {
                     </ul>
                 """,
                 // Triggers define which build statuses send an email
-                trigger: 'Always' 
+             post {
+        // This 'always' block is the trigger
+        always {
+            mail (
+                // NO 'trigger:' parameter here.
+                to: 'khushimushu@gmail.com',
+                subject: "Build ${currentBuild.result}",
+                body: "Build ${env.BUILD_NUMBER} finished with status ${currentBuild.result}."
+            )
+        }
             )
         }
         
