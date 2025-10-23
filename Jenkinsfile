@@ -5,6 +5,7 @@ pipeline {
         // Email recipients (you'll usually replace with real emails or a param)
         EMAIL_RECIPIENTS = 'khushimushu@gmail.com'
     }
+    hhhhhhhhhhhhhhhhhhhhhhhh
 
     stages {
         stage('Build') {
