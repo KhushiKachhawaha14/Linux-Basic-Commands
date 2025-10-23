@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // 1. Fetch Data from Git using the 'checkout' or 'git' step
                 git branch: 'main', 
-                    credentialsId: 'KhushiKachhawaha14', // Replace with the ID of your Git credentials (SSH Key or Username/Password)
+                    credentialsId: 'KhushiKachhawaha14', // Replace with the ID of your Git credentials
                     url: 'https://github.com/KhushiKachhawaha14/Linux-Basic-Commands.git' // Replace with your repository URL
 
                 // Optional: Print details about the last commit for verification
@@ -26,45 +26,52 @@ pipeline {
 
     // 2. Send Email Notifications using the 'post' section
     post {
-        // Always attempt to send an email, regardless of the stage results
-        always {
-            echo "Checking build status for email notification..."
-            
-            // Use the Email Extension Plugin step 'emailext'
+        // Send a detailed email ONLY on build success
+        success {
+            echo "Build successful. Sending success notification email."
             emailext (
-                // Email recipients (use space, comma, or semi-colon separated list)
                 to: 'dev.team@example.com', 
-                
-                // Subject line will be customized based on the status
-                subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - \$BUILD_STATUS",
-                
-                // HTML body content
+                subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - SUCCESS",
                 body: """
-                    <h2>Jenkins Build Notification: \$BUILD_STATUS</h2>
+                    <h2>Jenkins Build Notification: SUCCESS</h2>
                     <p>Job: \$PROJECT_NAME (Build #\$BUILD_NUMBER)</p>
-                    <p>Status: \$BUILD_STATUS</p>
+                    <p>Status: SUCCESS</p>
                     <p>Check the full details here: <a href="\$BUILD_URL">View Console Output</a></p>
                     
                     <h3>Changes in this Build:</h3>
                     <ul>
                         \$CHANGES_SINCE_LAST_SUCCESS // Fetches and displays commit details from Git
                     </ul>
-                """,
-                // Triggers define which build statuses send an email
-  // ... (Your Stages block ends)
-// }  <-- This brace closes the 'stages' block
+                """
+            )
+        }
 
-           post { // <--- The 'post' block starts here
-               always {
-        // ... actions for all build results
-    }
+        // Send an urgent email ONLY on build failure
+        failure {
+            echo "Build failed. Sending urgent failure email."
+            emailext (
+                to: 'dev.lead@example.com', // Different recipient for failure
+                subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - FAILURE",
+                body: """
+                    <h2>Jenkins Build Notification: FAILURE</h2>
+                    <p>Job: \$PROJECT_NAME (Build #\$BUILD_NUMBER)</p>
+                    <p>Status: FAILURE - Please investigate immediately.</p>
+                    <p>Error details: <a href="\$BUILD_URL">View Console Output and Stack Trace</a></p>
+                """
+            )
+        }
 
-    // Line 67 is here, correctly inside the 'post' block
-     failure {
-                  echo "Build failed. Sending urgent failure email."
-        // Add a separate email configuration here if you want different recipients/c
+        // Always run cleanup steps, regardless of build result
+        always {
+            echo "Performing post-build cleanup actions."
+            // sh 'rm -rf build' // Example cleanup command
+        }
     }
-} // <--- The 'post' block closes here
-                }
+}
+
+                
+
+  
+
              
                 
