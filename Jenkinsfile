@@ -28,8 +28,7 @@ pipeline {
         // Send a detailed email ONLY on build success
         success {
             echo "Build successful. Sending success notification email."
-            emailext (
-                to: 'khushimushu@gmail.com', 
+            mail to: 'khushimushu@gmail.com', 
                 subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - SUCCESS",
                 body: """
                     <h2>Jenkins Build Notification: SUCCESS</h2>
@@ -42,14 +41,13 @@ pipeline {
                         \$CHANGES_SINCE_LAST_SUCCESS // Fetches and displays commit details from Git
                     </ul>
                 """
-            )
+        
         }
 
         // Send an urgent email ONLY on build failure
         failure {
             echo "Build failed. Sending urgent failure email."
-            emailext (
-                to: 'dev.lead@example.com', // Different recipient for failure
+            mail to: 'khushimushu@gmail.com', // Different recipient for failure
                 subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - FAILURE",
                 body: """
                     <h2>Jenkins Build Notification: FAILURE</h2>
@@ -57,7 +55,7 @@ pipeline {
                     <p>Status: FAILURE - Please investigate immediately.</p>
                     <p>Error details: <a href="\$BUILD_URL">View Console Output and Stack Trace</a></p>
                 """
-            )
+            
         }
 
         // Always run cleanup steps, regardless of build result
