@@ -1,32 +1,36 @@
 pipeline {
-    agent any                      // run on any available agent/node
-
+    agent any
+    
     environment {
         // Email recipients (you'll usually replace with real emails or a param)
         EMAIL_RECIPIENTS = 'khushimushu@gmail.com'
     }
-    hhhhhhhhhhhhhhhhhhhhhhhh
-
     stages {
         stage('Build') {
             steps {
-                echo 'Building the project...'
-                // Example build step
+                echo 'Building the project... (Successful)'
                 sh 'echo "Simulating build process..."'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests...'
-                // Example test command
-                sh 'echo "Tests successful!"'
+                echo 'Running tests... (Intentionally failing now)'
+                
+                // 🛑 NEW STEP: FORCE BUILD FAILURE 
+                // This command will exit with a status of 1 (failure).
+                // Jenkins interprets any non-zero exit status as a failure,
+                // stopping subsequent stages and triggering the 'post { failure }' block.
+                sh 'exit 1' 
+                
+                // Alternatively, you could use the native Groovy step:
+                // error('Intentionally failing the Test stage.')
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying the application...'
+                echo 'Deploying the application... (This stage will be skipped)'
                 sh 'echo "Deployment completed!"'
             }
         }
@@ -44,10 +48,10 @@ pipeline {
                 <p>Check the build details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
                 mimeType: 'text/html'
-    
         }
 
         failure {
+            // ✅ THIS BLOCK WILL BE EXECUTED
             echo 'Build failed! Sending failure email...'
             mail to: 'khushimushu@gmail.com',
                 subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
@@ -58,9 +62,6 @@ pipeline {
                 <p>Check the logs here: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
                 mimeType: 'text/html'
-            
         }
     }
 }
-             
-                
