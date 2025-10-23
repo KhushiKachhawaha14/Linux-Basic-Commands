@@ -49,7 +49,7 @@ pipeline {
 
         failure {
             echo 'Build failed! Sending failure email...'
-            mail to: "${env.EMAIL_RECIPIENTS}",
+            mail to: 'khushimushu@gmail.com'
                 subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                 <h3>⚠️ Build Failed!</h3>
