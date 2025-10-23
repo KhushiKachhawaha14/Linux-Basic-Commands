@@ -6,7 +6,6 @@ pipeline {
             steps {
                 // 1. Fetch Data from Git using the 'checkout' or 'git' step
                 git branch: 'main', 
-                    credentialsId: 'KhushiKachhawaha14', // Replace with the ID of your Git credentials
                     url: 'https://github.com/KhushiKachhawaha14/Linux-Basic-Commands.git' // Replace with your repository URL
 
                 // Optional: Print details about the last commit for verification
