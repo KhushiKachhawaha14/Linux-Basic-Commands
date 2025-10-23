@@ -65,4 +65,5 @@ post { // <--- The 'post' block starts here
         // Add a separate email configuration here if you want different recipients/c
     }
 } // <--- The 'post' block closes here
-// }  <-- This brace closes the entire 'pipeline' block
+                } // <-- This brace closes the entire 'pipeline' block
+                
