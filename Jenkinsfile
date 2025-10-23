@@ -1,53 +1,51 @@
 pipeline {
     agent any
     
+    // Set environment variables for easy maintenance
     environment {
-        // Email recipients (you'll usually replace with real emails or a param)
         EMAIL_RECIPIENTS = 'khushimushu@gmail.com'
     }
     
     stages {
         stage('Build') {
             steps {
-                echo 'Building the project... (Successful)'
-                sh 'echo "Simulating build process..."'
+                echo 'Building the project...'
+                sh 'echo "Build step completed"'
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests... (Intentionally failing now to test email)'
-                
-                // This command will exit with a status of 1 (failure), 
-                // stopping subsequent stages and triggering the 'post { failure }' block.
+                echo 'Running tests (Intentionally forcing failure now)'
+                // This command exits with status 1, marking the build as FAILURE
                 sh 'exit 1' 
-                
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'Deploying the application... (This stage will be skipped)'
-                sh 'echo "Deployment completed!"'
+                echo 'This stage is skipped due to failure in the Test stage.'
             }
         }
     }
 
     post {
-        success {
-            echo 'Build succeeded! (This will not run as we forced a failure)'
-        }
-
         failure {
-            // ✅ THIS BLOCK WILL BE EXECUTED because the 'Test' stage failed.
-            echo 'Build failed! Sending failure email via standard mail step...'
+            echo 'Build failed! Executing post-failure actions and sending email.'
+            
             mail to: "${env.EMAIL_RECIPIENTS}",
-                subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                // Use currentBuild.fullDisplayName for a clean job name and build number
+                subject: "❌ Build FAILED: ${currentBuild.fullDisplayName}",
                 body: """
                 <h3>⚠️ Build Failed!</h3>
                 <p>Project: ${env.JOB_NAME}</p>
                 <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Status: FAILURE</p>
+                
+                <!-- This link must point to the globally configured Jenkins URL -->
                 <p>Check the logs here: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                
+                <p>Note: If the link above does not work, the Jenkins URL is configured incorrectly in Manage Jenkins > System.</p>
                 """,
                 mimeType: 'text/html'
         }
