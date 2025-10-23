@@ -61,7 +61,6 @@ pipeline {
                 body: "Build ${env.BUILD_NUMBER} finished with status ${currentBuild.result}."
             )
         }
-            )
         }
         
         // You can also use 'failure', 'success', 'unstable', 'fixed' triggers instead of 'always'
