@@ -30,7 +30,7 @@ pipeline {
         success {
             echo "Build successful. Sending success notification email."
             emailext (
-                to: 'dev.team@example.com', 
+                to: 'khushimushu@gmail.com', 
                 subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - SUCCESS",
                 body: """
                     <h2>Jenkins Build Notification: SUCCESS</h2>
