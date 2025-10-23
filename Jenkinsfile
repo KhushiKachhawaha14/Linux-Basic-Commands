@@ -51,22 +51,18 @@ pipeline {
                     </ul>
                 """,
                 // Triggers define which build statuses send an email
-             post {
-        // This 'always' block is the trigger
-        always {
-            mail (
-                // NO 'trigger:' parameter here.
-                to: 'khushimushu@gmail.com',
-                subject: "Build ${currentBuild.result}",
-                body: "Build ${env.BUILD_NUMBER} finished with status ${currentBuild.result}."
-            )
-        }
-        }
-        
-        // You can also use 'failure', 'success', 'unstable', 'fixed' triggers instead of 'always'
-        failure {
-            echo "Build failed. Sending urgent failure email."
-            // Add a separate email configuration here if you want different recipients/content for failure
-        }
+  // ... (Your Stages block ends)
+// }  <-- This brace closes the 'stages' block
+
+post { // <--- The 'post' block starts here
+    always {
+        // ... actions for all build results
     }
-}
+
+    // Line 67 is here, correctly inside the 'post' block
+    failure {
+        echo "Build failed. Sending urgent failure email."
+        // Add a separate email configuration here if you want different recipients/c
+    }
+} // <--- The 'post' block closes here
+// }  <-- This brace closes the entire 'pipeline' block
