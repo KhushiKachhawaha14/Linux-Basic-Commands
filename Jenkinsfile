@@ -54,16 +54,17 @@ pipeline {
   // ... (Your Stages block ends)
 // }  <-- This brace closes the 'stages' block
 
-post { // <--- The 'post' block starts here
-    always {
+           post { // <--- The 'post' block starts here
+               always {
         // ... actions for all build results
     }
 
     // Line 67 is here, correctly inside the 'post' block
-    failure {
-        echo "Build failed. Sending urgent failure email."
+     failure {
+                  echo "Build failed. Sending urgent failure email."
         // Add a separate email configuration here if you want different recipients/c
     }
 } // <--- The 'post' block closes here
-                } // <-- This brace closes the entire 'pipeline' block
-                )
+                }
+             
+                
