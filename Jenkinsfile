@@ -34,8 +34,7 @@ pipeline {
     post {
         success {
             echo 'Build succeeded! Sending success email...'
-            emailext(
-                to: 'khushimushu@gmail.com',
+            mail to: 'khushimushu@gmail.com',
                 subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                 <h3>✅ Build Successful!</h3>
@@ -44,13 +43,12 @@ pipeline {
                 <p>Check the build details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
                 mimeType: 'text/html'
-            )
+    
         }
 
         failure {
             echo 'Build failed! Sending failure email...'
-            emailext(
-                to: "${env.EMAIL_RECIPIENTS}",
+            mail to: "${env.EMAIL_RECIPIENTS}",
                 subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                 <h3>⚠️ Build Failed!</h3>
@@ -59,7 +57,7 @@ pipeline {
                 <p>Check the logs here: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
                 mimeType: 'text/html'
-            )
+            
         }
     }
 }
