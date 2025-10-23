@@ -1,74 +1,67 @@
 pipeline {
-    agent any // Defines where the pipeline will run (any available agent)
+    agent any                      // run on any available agent/node
+
+    environment {
+        // Email recipients (you'll usually replace with real emails or a param)
+        EMAIL_RECIPIENTS = 'khushimushu@gmail.com'
+    }
 
     stages {
-        stage('Fetch Code from Git') {
+        stage('Build') {
             steps {
-                // 1. Fetch Data from Git using the 'checkout' or 'git' step
-                git branch: 'main', 
-                    url: 'https://github.com/KhushiKachhawaha14/Linux-Basic-Commands.git' // Replace with your repository URL
-
-                // Optional: Print details about the last commit for verification
-                sh 'echo "Last commit details:"'
-                sh 'git log -1 --pretty=format:"%h - %an, %ar : %s"' 
+                echo 'Building the project...'
+                // Example build step
+                sh 'echo "Simulating build process..."'
             }
         }
-        
-        stage('Build/Test') {
+
+        stage('Test') {
             steps {
-                // Placeholder for your actual project work (e.g., compile, run tests)
-                echo "Simulating a build step..." 
-                // sh './mvnw clean install' // Example command
+                echo 'Running tests...'
+                // Example test command
+                sh 'echo "Tests successful!"'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying the application...'
+                sh 'echo "Deployment completed!"'
             }
         }
     }
 
-    // 2. Send Email Notifications using the 'post' section
     post {
-        // Send a detailed email ONLY on build success
         success {
-            echo "Build successful. Sending success notification email."
-            mail to: 'khushimushu@gmail.com', 
-                subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - SUCCESS",
+            echo 'Build succeeded! Sending success email...'
+            emailext(
+                to: "${env.EMAIL_RECIPIENTS}",
+                subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                    <h2>Jenkins Build Notification: SUCCESS</h2>
-                    <p>Job: \$PROJECT_NAME (Build #\$BUILD_NUMBER)</p>
-                    <p>Status: SUCCESS</p>
-                    <p>Check the full details here: <a href="\$BUILD_URL">View Console Output</a></p>
-                    
-                    <h3>Changes in this Build:</h3>
-                    <ul>
-                        \$CHANGES_SINCE_LAST_SUCCESS // Fetches and displays commit details from Git
-                    </ul>
-                """
-        
+                <h3>✅ Build Successful!</h3>
+                <p>Project: ${env.JOB_NAME}</p>
+                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Check the build details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
         }
 
-        // Send an urgent email ONLY on build failure
         failure {
-            echo "Build failed. Sending urgent failure email."
-            mail to: 'khushimushu@gmail.com', // Different recipient for failure
-                subject: "\$PROJECT_NAME - Build #\$BUILD_NUMBER - FAILURE",
+            echo 'Build failed! Sending failure email...'
+            emailext(
+                to: "${env.EMAIL_RECIPIENTS}",
+                subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
-                    <h2>Jenkins Build Notification: FAILURE</h2>
-                    <p>Job: \$PROJECT_NAME (Build #\$BUILD_NUMBER)</p>
-                    <p>Status: FAILURE - Please investigate immediately.</p>
-                    <p>Error details: <a href="\$BUILD_URL">View Console Output and Stack Trace</a></p>
-                """
-            
-        }
-
-        // Always run cleanup steps, regardless of build result
-        always {
-            echo "Performing post-build cleanup actions."
-            // sh 'rm -rf build' // Example cleanup command
+                <h3>⚠️ Build Failed!</h3>
+                <p>Project: ${env.JOB_NAME}</p>
+                <p>Build Number: ${env.BUILD_NUMBER}</p>
+                <p>Check the logs here: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                """,
+                mimeType: 'text/html'
+            )
         }
     }
 }
-
-                
-
-  
-
              
                 
