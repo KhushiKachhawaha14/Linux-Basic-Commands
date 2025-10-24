@@ -39,8 +39,7 @@ pipeline {
                 <h3>✅ Build Successful!</h3>
                 <p>Project: ${env.JOB_NAME}</p>
                 <p>Build Number: ${env.BUILD_NUMBER}</p>
-                "Status: ${currentBuild.currentResult}\n" +
-                       "View details: ${env.BUILD_URL}"
+                <p>Check the build details: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
                 """,
                 mimeType: 'text/html'
         }
