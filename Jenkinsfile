@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Email recipients (you'll usually replace with real emails or a param)
-        EMAIL_RECIPIENTS = 'khushimushu@gmail.com'
+        EMAIL_RECIPIENTS = 'xyz@gmail.com'
     }
     stages {
         stage('Build') {
@@ -33,7 +33,7 @@ pipeline {
     post {
         success {
             echo 'Build succeeded! Sending success email...'
-            mail to: 'khushimushu@gmail.com',
+            mail to: 'xyz@gmail.com',
                 subject: "Jenkins Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                 <h3>✅ Build Successful!</h3>
@@ -46,7 +46,7 @@ pipeline {
 
         failure {
             echo 'Build failed! Sending failure email...'
-            mail to: 'khushimushu@gmail.com',
+            mail to: 'xyz@gmail.com',
                 subject: "❌ Jenkins Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
                 <h3>⚠️ Build Failed!</h3>
